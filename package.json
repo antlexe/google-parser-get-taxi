@@ -10,7 +10,7 @@
     "type": "git",
     "url": "git+https://github.com/antlexe/google-parser-get-taxi.git"
   },
-  "license": "ISC",
+  "license": "MIT",
   "author": "",
   "type": "module",
   "main": "index.js",
@@ -18,7 +18,15 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
     "@types/node": "^25.3.0",
-    "typescript": "^5.9.3"
+    "eslint": "^10.0.1",
+    "eslint-config-prettier": "^10.1.8",
+    "globals": "^17.3.0",
+    "nodemon": "^3.1.14",
+    "prettier": "^3.8.1",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.56.0"
   }
 }
