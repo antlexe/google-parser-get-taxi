@@ -7,13 +7,32 @@ export function extractUrls(html: string): string[] {
   return Array.from(matches).map((match) => match[1] || '');
 }
 
+export function extractUrlsAd(html: string): string[] {
+  const matches = html.matchAll(
+    /<a[^>]*class="sVXRqc"[^>]*href="([^"]*)"[^>]*>/gs,
+  );
+  return Array.from(matches).map((match) => match[1] || '');
+}
+
 export function extractAnchors(html: string): string[] {
   const matches = html.matchAll(
     /<h3[^>]*class="LC20lb MBeuO DKV0Md"[^>]*>([\s\S]*?)<\/h3>/gs,
   );
   return Array.from(matches).map((match) => {
     const rawText = match[1]?.replace(/<[^>]*>/g, '') || '';
-    return normalizeSpaces(rawText);
+    const decodedText = decodeHtmlEntities(rawText)
+    return normalizeSpaces(decodedText);
+  });
+}
+
+export function extractAnchorsAd(html: string): string[] {
+  const matches = html.matchAll(
+    /<div[^>]*class="CCgQ5 vCa9Yd QfkTvb N8QANc MBeuO Va3FIb EE3Upf"[^>]*>([\s\S]*?)<\/div>/gs,
+  );
+  return Array.from(matches).map((match) => {
+    const rawText = match[1]?.replace(/<[^>]*>/g, '') || '';
+    const decodedText = decodeHtmlEntities(rawText);
+    return normalizeSpaces(decodedText);
   });
 }
 
@@ -21,13 +40,30 @@ export function extractSnippets(html: string): string[] {
   const matches = html.matchAll(
     /<div[^>]*class="VwiC3b yXK7lf p4wth r025kc Hdw6tb"[^>]*>([\s\S]*?)<\/div>/gs,
   );
-  return Array.from(matches).map(
-    (match) =>
+  return Array.from(matches).map((match) => {
+    const rawText =
       match[1]
         ?.replace(/<[^>]*>/g, '')
         .replace(/\s+/g, ' ')
-        .trim() || '',
+        .trim() || '';
+
+    return decodeHtmlEntities(rawText);
+  });
+}
+
+export function extractSnippetsAd(html: string): string[] {
+  const matches = html.matchAll(
+    /<div[^>]*class="p4wth"[^>]*>([\s\S]*?)<\/div>/gs,
   );
+  return Array.from(matches).map((match) => {
+    const rawText =
+      match[1]
+        ?.replace(/<[^>]*>/g, '')
+        .replace(/\s+/g, ' ')
+        .trim() || '';
+
+    return decodeHtmlEntities(rawText);
+  });
 }
 
 export function extractNextPageUrl(

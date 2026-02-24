@@ -6,6 +6,9 @@ import {
   extractAnchors,
   extractSnippets,
   extractNextPageUrl,
+  extractUrlsAd,
+  extractSnippetsAd,
+  extractAnchorsAd,
 } from './parser.js';
 import { readHtmlFile, saveToCSV, saveNextPageUrl } from './fileHandler.js';
 
@@ -13,6 +16,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const EXPECTED_COUNT = 10;
+const EXPECTED_COUNT_AD = 2;
 const BASE_URL = 'https://google.com';
 
 async function parseGoogleResults() {
@@ -28,9 +32,14 @@ async function parseGoogleResults() {
     const anchors = extractAnchors(html);
     const snippets = extractSnippets(html);
 
-    console.log(`🔗 Найдено URL: ${urls.length}`);
-    console.log(`📝 Найдено анкоров: ${anchors.length}`);
-    console.log(`📊 Найдено сниппетов: ${snippets.length}`);
+    // Парсинг рекламы
+    const urlsAd = extractUrlsAd(html);
+    const anchorsAd = extractAnchorsAd(html);
+    const snippetsAd = extractSnippetsAd(html);
+
+    console.log(`🔗 Найдено URL: ${urls.length + urlsAd.length}`);
+    console.log(`📝 Найдено анкоров: ${anchors.length + anchorsAd.length}`);
+    console.log(`📊 Найдено сниппетов: ${snippets.length + snippetsAd.length}`);
 
     // Проверки
     [
@@ -45,6 +54,19 @@ async function parseGoogleResults() {
       }
     });
 
+    // Проверки рекламы
+    [
+      { name: 'URL', value: urlsAd.length },
+      { name: 'анкоров', value: anchorsAd.length },
+      { name: 'сниппетов', value: snippetsAd.length },
+    ].forEach((item) => {
+      if (item.value !== EXPECTED_COUNT_AD) {
+        console.log(
+          `⚠️  Предупреждение: найдено ${item.value} ${item.name} рекламных вместо ${EXPECTED_COUNT_AD}`,
+        );
+      }
+    });
+
     // Сбор результатов
     const results: SearchResult[] = [];
     for (let i = 0; i < EXPECTED_COUNT; i++) {
@@ -52,7 +74,19 @@ async function parseGoogleResults() {
         url: urls[i] || '',
         anchor: anchors[i] || '',
         snippet: snippets[i] || '',
+        ad: 'false',
       });
+    }
+
+    if (Math.max(urlsAd.length, anchorsAd.length, snippetsAd.length) > 0) {
+      for (let i = 0; i < EXPECTED_COUNT_AD; i++) {
+        results.push({
+          url: urlsAd[i] || '',
+          anchor: anchorsAd[i] || '',
+          snippet: snippetsAd[i] || '',
+          ad: 'true',
+        });
+      }
     }
 
     console.log(`\n📦 Создано результатов: ${results.length}`);

@@ -14,8 +14,12 @@ export async function saveToCSV(
     result.url,
     result.anchor,
     result.snippet,
+    result.ad,
   ]);
-  const csvContent = stringify([['URL', 'Anchor', 'Snippet'], ...csvData]);
+  const csvContent = stringify([
+    ['URL', 'Anchor', 'Snippet', 'Ad'],
+    ...csvData,
+  ]);
   await writeFile(filePath, csvContent, 'utf-8');
 }
 
