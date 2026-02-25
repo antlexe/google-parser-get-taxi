@@ -69,6 +69,18 @@ async function parseGoogleResults() {
 
     // Сбор результатов
     const results: SearchResult[] = [];
+
+    // Первая реклама
+    if (urlsAd[0] || anchorsAd[0] || snippetsAd[0]) {
+      results.push({
+        url: urlsAd[0] || '',
+        anchor: anchorsAd[0] || '',
+        snippet: snippetsAd[0] || '',
+        ad: 'true',
+      });
+    }
+
+    // Органические ответы
     for (let i = 0; i < EXPECTED_COUNT; i++) {
       results.push({
         url: urls[i] || '',
@@ -78,15 +90,14 @@ async function parseGoogleResults() {
       });
     }
 
-    if (Math.max(urlsAd.length, anchorsAd.length, snippetsAd.length) > 0) {
-      for (let i = 0; i < EXPECTED_COUNT_AD; i++) {
-        results.push({
-          url: urlsAd[i] || '',
-          anchor: anchorsAd[i] || '',
-          snippet: snippetsAd[i] || '',
-          ad: 'true',
-        });
-      }
+    // Вторая реклама
+    if (urlsAd[1] || anchorsAd[1] || snippetsAd[1]) {
+      results.push({
+        url: urlsAd[1] || '',
+        anchor: anchorsAd[1] || '',
+        snippet: snippetsAd[1] || '',
+        ad: 'true',
+      });
     }
 
     console.log(`\n📦 Создано результатов: ${results.length}`);
