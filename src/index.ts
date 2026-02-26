@@ -2,7 +2,7 @@ import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 import { extractNextPageUrl } from './parser.js';
 import { readHtmlFile, saveToCSV, saveNextPageUrl } from './fileHandler.js';
-import { parseGoogleResultsFromHtml } from './parserDom.js';
+import { parseGoogleResultsFromHtml } from './parserAnswers.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

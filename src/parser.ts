@@ -1,5 +1,12 @@
 import { decodeHtmlEntities, normalizeSpaces } from './utils.js';
 
+export function extractSearchAnswers(html: string): string[] {
+  const matches = html.matchAll(
+    /<div class="MjjYud">[\s\S]*?(?=<div class="MjjYud">|<div role="navigation")/g,
+  );
+  return Array.from(matches).map((match) => match[0]);
+}
+
 export function extractUrls(html: string): string[] {
   const matches = html.matchAll(
     /<a[^>]*class="zReHs"[^>]*href="([^"]*)"[^>]*>/gs,

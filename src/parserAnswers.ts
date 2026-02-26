@@ -1,4 +1,3 @@
-import { JSDOM } from 'jsdom';
 import type { SearchResult } from './types.js';
 import {
   extractUrls,
@@ -7,21 +6,18 @@ import {
   extractUrlsAd,
   extractSnippetsAd,
   extractAnchorsAd,
+  extractSearchAnswers,
 } from './parser.js';
 
 export function parseGoogleResultsFromHtml(html: string): SearchResult[] {
-  const dom = new JSDOM(html);
-  const document = dom.window.document;
-
-  const resultBlocks = document.querySelectorAll('div.MjjYud');
+  const resultBlocks = extractSearchAnswers(html);
+  console.log(`🔍 Найдено блоков результатов: ${resultBlocks.length}`);
 
   const results: SearchResult[] = [];
 
-  resultBlocks.forEach((block) => {
-    const blockHtml = block.outerHTML;
-
-    const isAd = block.querySelector('.sVXRqc');
-    const isOrganic = block.querySelector('.zReHs');
+  resultBlocks.forEach((blockHtml) => {
+    const isAd = blockHtml.includes('sVXRqc');
+    const isOrganic = blockHtml.includes('zReHs');
 
     if (isAd) {
       const urls = extractUrlsAd(blockHtml);
