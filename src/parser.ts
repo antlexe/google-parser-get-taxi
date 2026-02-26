@@ -20,7 +20,7 @@ export function extractAnchors(html: string): string[] {
   );
   return Array.from(matches).map((match) => {
     const rawText = match[1]?.replace(/<[^>]*>/g, '') || '';
-    const decodedText = decodeHtmlEntities(rawText)
+    const decodedText = decodeHtmlEntities(rawText);
     return normalizeSpaces(decodedText);
   });
 }
