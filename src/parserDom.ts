@@ -15,7 +15,6 @@ export function parseGoogleResultsFromHtml(html: string): SearchResult[] {
 
   const resultBlocks = document.querySelectorAll('div.MjjYud');
 
-
   const results: SearchResult[] = [];
 
   resultBlocks.forEach((block) => {
@@ -35,9 +34,7 @@ export function parseGoogleResultsFromHtml(html: string): SearchResult[] {
         snippet: snippets[0] || '',
         ad: 'true',
       });
-    }
-
-    if (isOrganic) {
+    } else if (isOrganic) {
       const urls = extractUrls(blockHtml);
       const anchors = extractAnchors(blockHtml);
       const snippets = extractSnippets(blockHtml);
